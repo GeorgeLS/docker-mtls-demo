@@ -33,7 +33,7 @@ openssl x509 -req -in "$CERTS_DIR/client.csr" -CA "$CERTS_DIR/ca.crt" -CAkey "$C
 
 # Set permissions to ensure files are readable by all
 chmod 644 "$CERTS_DIR/"*.crt
-chmod 600 "$CERTS_DIR/"*.key
+chmod 644 "$CERTS_DIR/"*.key
 
 # Clean up temporary files
 rm "$CERTS_DIR"/*.csr "$CERTS_DIR"/*.ext
