@@ -53,7 +53,6 @@ docker-compose up --build
 - Forwards validated requests to the Nginx backend.
 
 ### 3. **Nginx-Server**
-- Serves requests forwarded by Socat.
 - Enforces mTLS for all incoming connections.
 - Hosts a sample HTML page (`index.html`).
 
