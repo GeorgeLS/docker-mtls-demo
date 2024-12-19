@@ -62,3 +62,41 @@ services:
       curl --insecure https://socat-server:12345 && \
       sleep 60; \
       done"
+
+  mapi-mtls:
+    build:
+      context: .
+      dockerfile: mapi.Dockerfile
+    environment:
+      - MAYHEM_URL=https://app.mayhem.security
+      - MAYHEM_TOKEN=${MAYHEM_TOKEN}
+    depends_on:
+      - socat-server
+      - fastapi
+    volumes:
+      - ./certs:/app/certs
+    command: >
+      sh -c "while true; do
+      echo 'Running Mayhem for API tests using mTLS support...' && \
+      mapi run --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt --insecure-target --url 'https://nginx-server/' 'vlussenburg/mapi-action-examples/fastapi' auto https://nginx-server/openapi.json ; \
+      sleep 60;
+      done"
+
+  mapi-socat:
+    build:
+      context: .
+      dockerfile: mapi.Dockerfile
+    environment:
+      - MAYHEM_URL=https://app.mayhem.security
+      - MAYHEM_TOKEN=${MAYHEM_TOKEN}
+    depends_on:
+      - socat-server
+      - fastapi
+    volumes:
+      - ./certs:/app/certs
+    command: >
+      sh -c "while true; do
+      echo 'Running Mayhem for API tests via socat...' && \
+      mapi run 'vlussenburg/mapi-action-examples/fastapi' auto https://socat-server:12345/openapi.json --url 'https://socat-server:12345' --insecure-target; \
+      sleep 60;
+      done"
