@@ -8,7 +8,7 @@ This project demonstrates how to set up a mutual TLS (mTLS) proxy using **Socat*
 - **mTLS enforcement**: Socat validates client certificates and forwards valid requests to Nginx.
 - **Nginx backend**: Nginx requires certificates for all incoming connections.
 - **Self-signed certificates**: Certificates are generated dynamically for testing purposes.
-- **Curl-based testing**: A dedicated service (`socat-tester`) validates the behavior of the proxy setup.
+- **Curl-based testing**: A dedicated service (`socat-tester`/`curl-tester`) validates the behavior of the proxy setup.
 
 ---
 
@@ -59,7 +59,9 @@ docker-compose up --build
 
 ### 4. **Socat-Tester**
 - Simulates clients connecting to the Socat proxy.
-- Tests both valid and invalid certificate scenarios.
+
+## 5.  **curl-tester**
+- Simulates clients connecting directly to Nginx (with certs).
 
 ---
 
