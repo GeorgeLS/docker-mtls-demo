@@ -1,0 +1,57 @@
+services:
+  cert-gen:
+    image: alpine:latest
+    volumes:
+      - ./certs:/app/certs
+      - ./generate-certs.sh:/app/generate-certs.sh
+    entrypoint: "sh /app/generate-certs.sh"
+
+  socat-server:
+    build:
+      context: .
+    depends_on:
+      - cert-gen
+      - nginx-server
+    volumes:
+      - ./certs:/app/certs
+    ports:
+      - "12345:12345"
+    command: >
+      socat -v
+      OPENSSL-LISTEN:12345,reuseaddr,fork,cert=/app/certs/server.crt,key=/app/certs/server.key,verify=0
+      OPENSSL:nginx-server:443,cert=/app/certs/client.crt,key=/app/certs/client.key,cafile=/app/certs/ca.crt,verify=1
+
+  nginx-server:
+    build:
+      context: .
+    depends_on:
+      - cert-gen
+    volumes:
+      - ./certs:/app/certs
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "443:443"
+    command: nginx -g "daemon off;"
+
+  curl-tester:
+    image: curlimages/curl:latest
+    depends_on:
+      - nginx-server
+    volumes:
+      - ./certs:/app/certs
+    command: >
+      sh -c "while true; do
+      curl --cert /app/certs/client.crt --key /app/certs/client.key --cacert /app/certs/ca.crt https://nginx-server &&
+      sleep 60;
+      done"
+
+  socat-tester:
+    image: curlimages/curl:latest
+    depends_on:
+      - socat-server
+    command: >
+      sh -c "while true; do
+      echo 'Testing socat server without certs using curl' && \
+      curl --insecure https://socat-server:12345 && \
+      sleep 60; \
+      done"
