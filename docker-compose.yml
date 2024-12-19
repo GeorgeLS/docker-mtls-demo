@@ -21,6 +21,13 @@ services:
       OPENSSL-LISTEN:12345,reuseaddr,fork,cert=/app/certs/server.crt,key=/app/certs/server.key,verify=0
       OPENSSL:nginx-server:443,cert=/app/certs/client.crt,key=/app/certs/client.key,cafile=/app/certs/ca.crt,verify=1
 
+  fastapi:
+    build:
+      dockerfile: ../fastapi.Dockerfile 
+      context: ./app
+    expose:
+      - "8000" # Internal network port
+
   nginx-server:
     build:
       context: .
