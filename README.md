@@ -60,7 +60,7 @@ docker-compose up --build
 ### 4. **Socat-Tester**
 - Simulates clients connecting to the Socat proxy.
 
-## 5.  **curl-tester**
+### 5.  **curl-tester**
 - Simulates clients connecting directly to Nginx (with certs).
 
 ---
