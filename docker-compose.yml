@@ -78,7 +78,7 @@ services:
     command: >
       sh -c "while true; do
       echo 'Running Mayhem for API tests using mTLS support...' && \
-      mapi run --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt --insecure-target --url 'https://nginx-server/' 'vlussenburg/mapi-action-examples/fastapi' auto https://nginx-server/openapi.json ; \
+      mapi run --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt --insecure-target --url 'https://nginx-server/' 'mapi-action-examples/fastapi' auto https://nginx-server/openapi.json ; \
       sleep 60;
       done"
 
@@ -97,6 +97,6 @@ services:
     command: >
       sh -c "while true; do
       echo 'Running Mayhem for API tests via socat...' && \
-      mapi run 'vlussenburg/mapi-action-examples/fastapi' auto https://socat-server:12345/openapi.json --url 'https://socat-server:12345' --insecure-target; \
+      mapi run 'mapi-action-examples/fastapi' auto https://socat-server:12345/openapi.json --url 'https://socat-server:12345' --insecure-target; \
       sleep 60;
       done"
