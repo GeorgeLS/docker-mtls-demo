@@ -70,8 +70,7 @@ services:
       - MAYHEM_URL=https://app.mayhem.security
       - MAYHEM_TOKEN=${MAYHEM_TOKEN}
     depends_on:
-      - socat-server
-      - fastapi
+      - nginx-server
     volumes:
       - ./certs:/app/certs
     command: >
@@ -89,7 +88,6 @@ services:
       - MAYHEM_TOKEN=${MAYHEM_TOKEN}
     depends_on:
       - socat-server
-      - fastapi
     volumes:
       - ./certs:/app/certs
     command: >
