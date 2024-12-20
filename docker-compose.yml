@@ -42,31 +42,30 @@ services:
 
   curl-tester:
     image: curlimages/curl:latest
+    restart: always
     depends_on:
       - nginx-server
     volumes:
       - ./certs:/app/certs
     command: >
-      sh -c "while true; do
-      curl --cert /app/certs/client.crt --key /app/certs/client.key --cacert /app/certs/ca.crt https://nginx-server &&
-      sleep 60;
-      done"
+      sh -c "curl --cert /app/certs/client.crt --key /app/certs/client.key --cacert /app/certs/ca.crt https://nginx-server &&
+      sleep 60"
 
   socat-tester:
     image: curlimages/curl:latest
+    restart: always
     depends_on:
       - socat-server
     command: >
-      sh -c "while true; do
-      echo 'Testing socat server without certs using curl' && \
+      sh -c "echo 'Testing socat server without certs using curl' && \
       curl --insecure https://socat-server:12345 && \
-      sleep 60; \
-      done"
+      sleep 60"
 
   mapi-mtls:
     build:
       context: .
       dockerfile: mapi.Dockerfile
+    restart: always
     environment:
       - MAYHEM_URL=https://app.mayhem.security
       - MAYHEM_TOKEN=${MAYHEM_TOKEN}
@@ -76,16 +75,15 @@ services:
     volumes:
       - ./certs:/app/certs
     command: >
-      sh -c "while true; do
-      echo 'Running Mayhem for API tests using mTLS support...' && \
+      sh -c "echo 'Running Mayhem for API tests using mTLS support...' && \
       mapi run --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt --insecure-target --url 'https://nginx-server/' 'mapi-action-examples/fastapi' auto https://nginx-server/openapi.json ; \
-      sleep 60;
-      done"
+      sleep 60"
 
   mapi-socat:
     build:
       context: .
       dockerfile: mapi.Dockerfile
+    restart: always
     environment:
       - MAYHEM_URL=https://app.mayhem.security
       - MAYHEM_TOKEN=${MAYHEM_TOKEN}
@@ -95,8 +93,6 @@ services:
     volumes:
       - ./certs:/app/certs
     command: >
-      sh -c "while true; do
-      echo 'Running Mayhem for API tests via socat...' && \
+      sh -c "echo 'Running Mayhem for API tests via socat...' && \
       mapi run 'mapi-action-examples/fastapi' auto https://socat-server:12345/openapi.json --url 'https://socat-server:12345' --insecure-target; \
-      sleep 60;
-      done"
+      sleep 60"
