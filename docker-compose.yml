@@ -1,6 +1,7 @@
 services:
   cert-gen:
-    image: alpine:latest
+    build:
+      context: .
     volumes:
       - ./certs:/app/certs
       - ./generate-certs.sh:/app/generate-certs.sh
@@ -23,7 +24,7 @@ services:
 
   fastapi:
     build:
-      dockerfile: ../fastapi.Dockerfile 
+      dockerfile: ../fastapi.Dockerfile
       context: ./app
     expose:
       - "8000" # Internal network port
