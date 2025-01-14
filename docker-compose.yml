@@ -30,8 +30,7 @@ services:
       - "8000" # Internal network port
 
   nginx-server:
-    build:
-      context: .
+    image: nginx:1.14.1
     depends_on:
       - cert-gen
     volumes:

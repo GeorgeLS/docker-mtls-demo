@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Install necessary tools
-RUN apk add --no-cache nginx openssl socat
+RUN apk add --no-cache openssl socat
 
 # Set up working directory
 WORKDIR /app
