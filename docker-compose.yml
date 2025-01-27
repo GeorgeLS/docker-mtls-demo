@@ -76,7 +76,7 @@ services:
       - ./certs:/app/certs
     command: >
       sh -c "echo 'Running Mayhem for API tests using mTLS support...' && \
-      mapi run 'mapi-action-examples/fastapi' auto openapi.json --url 'https://nginx-server/' --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt ; \
+      mapi run 'mapi-action-examples/fastapi' auto https://nginx-server/openapi.json --url 'https://nginx-server/' --key /app/certs/client.key --cert /app/certs/client.crt --cacert /app/certs/ca.crt ; \
       sleep 60"
 
   mapi-socat:
